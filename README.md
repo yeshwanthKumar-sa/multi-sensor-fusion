@@ -2,9 +2,16 @@
 
 > **B.Tech Major Project** — S. Yeshwanth (22211A66B2)  
 > Department of CSE (AI & ML), B V Raju Institute of Technology  
-> Guided by: Mr. Kunal Devidas Gaikwad & Mrs. Indumathi V
+## Live Demo
+
+🚀 Try the deployed application:
+
+https://multi-sensor-fusion-syk.streamlit.app
 
 ---
+## Dashboard Preview
+
+![Dashboard](assets/dashboard.png)
 
 ## Overview
 
