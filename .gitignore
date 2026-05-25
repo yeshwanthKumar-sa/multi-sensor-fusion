@@ -26,3 +26,5 @@ Thumbs.db
 
 # Dataset
 data/
+# YOLO model
+yolov8n.pt

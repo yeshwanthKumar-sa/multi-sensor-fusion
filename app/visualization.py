@@ -1,45 +1,44 @@
-from PIL import ImageDraw
+from ultralytics import YOLO
+from PIL import Image
+
+# Load YOLO model
+model = YOLO("yolov8n.pt")
+
+CONFIDENCE_THRESHOLD = 0.5
+
+ALLOWED_CLASSES = [
+    "car",
+    "truck",
+    "bus",
+    "motorcycle",
+    "bicycle",
+    "person"
+]
+
 
 def draw_boxes(image):
 
-    image = image.copy()
-
-    draw = ImageDraw.Draw(image)
-
-    width, height = image.size
-
-    vehicle_box = [
-        (width * 0.15, height * 0.55),
-        (width * 0.45, height * 0.9)
-    ]
-
-    pedestrian_box = [
-    (width * 0.78, height * 0.42),
-    (width * 0.88, height * 0.78)
-    ]
-
-    draw.rectangle(
-        vehicle_box,
-        outline="red",
-        width=5
+    results = model(
+        image,
+        conf=CONFIDENCE_THRESHOLD
     )
 
-    draw.text(
-        (vehicle_box[0][0], vehicle_box[0][1] - 30),
-        "Vehicle",
-        fill="red"
-    )
+    # Filter unwanted classes
+    for result in results:
 
-    draw.rectangle(
-        pedestrian_box,
-        outline="blue",
-        width=5
-    )
+        keep_boxes = []
 
-    draw.text(
-        (pedestrian_box[0][0], pedestrian_box[0][1] - 30),
-        "Pedestrian",
-        fill="blue"
-    )
+        for box in result.boxes:
 
-    return image
+            cls_id = int(box.cls[0])
+
+            label = model.names[cls_id]
+
+            if label in ALLOWED_CLASSES:
+                keep_boxes.append(box)
+
+        result.boxes = keep_boxes
+
+    plotted_image = results[0].plot()
+
+    return Image.fromarray(plotted_image)

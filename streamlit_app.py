@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 st.title("Multi-Sensor Fusion Demo")
-st.write("Autonomous Vehicle Perception System")
+st.write("Real-Time Object Detection using YOLOv8")
 
 uploaded_file = st.file_uploader(
     "Upload Image",
@@ -36,24 +36,33 @@ if uploaded_file:
 
     with col2:
 
-        with st.spinner("Running sensor fusion inference..."):
-            time.sleep(2)
+        with st.spinner("Running YOLO inference..."):
+            time.sleep(1)
 
         st.success("Inference Complete!")
 
         st.subheader("Detection Results")
 
-        results = run_inference()
+        results = run_inference(image)
 
-        for obj in results["objects"]:
-            st.write(f"{obj} detected")
+        if len(results) == 0:
 
-        st.write(f"Confidence Score: {results['confidence']}")
+            st.warning("No objects detected")
+
+        else:
+
+            for detection in results:
+
+                st.success(
+                    f"{detection['label']} detected "
+                    f"({detection['confidence']}%)"
+                )
 
         st.markdown("---")
 
         st.subheader("System Info")
 
-        st.write("Model: Multi-Sensor Fusion Model")
-        st.write("Sensors: Camera, LiDAR, Radar")
+        st.write("Model: YOLOv8 Nano")
+        st.write("Inference: Real-Time Object Detection")
+        st.write("Framework: Ultralytics YOLO")
         st.write("Status: Active")
