@@ -1,9 +1,17 @@
 import streamlit as st
 from PIL import Image
+from ultralytics import YOLO
+from streamlit_webrtc import webrtc_streamer
+import av
 import time
 
 from app.inference import run_inference
 from app.visualization import draw_boxes
+
+# Load YOLO model
+model = YOLO("yolov8n.pt")
+
+CONFIDENCE_THRESHOLD = 0.5
 
 st.set_page_config(
     page_title="Multi-Sensor Fusion",
@@ -11,7 +19,13 @@ st.set_page_config(
 )
 
 st.title("Multi-Sensor Fusion Demo")
-st.write("Autonomous Vehicle Object Detection System")
+st.write("Autonomous Vehicle Perception System")
+
+# -----------------------------------
+# IMAGE UPLOAD SECTION
+# -----------------------------------
+
+st.header("Image Detection")
 
 uploaded_file = st.file_uploader(
     "Upload Image",
@@ -52,7 +66,7 @@ if uploaded_file:
 
         if len(results) == 0:
 
-            st.warning("No autonomous vehicle objects detected")
+            st.warning("No AV objects detected")
 
         else:
 
@@ -111,11 +125,51 @@ if uploaded_file:
             for cls in unique_classes:
                 st.write(f"• {cls}")
 
-        st.markdown("---")
+# -----------------------------------
+# WEBCAM SECTION
+# -----------------------------------
 
-        st.subheader("System Info")
+st.markdown("---")
 
-        st.write("Model: YOLOv8 Nano")
-        st.write("Detection Mode: Autonomous Vehicle Filtering")
-        st.write("Framework: Ultralytics YOLO")
-        st.write("Status: Active")
+st.header("Live Webcam Detection")
+
+
+def video_frame_callback(frame):
+
+    img = frame.to_ndarray(format="bgr24")
+
+    results = model(
+        img,
+        conf=CONFIDENCE_THRESHOLD
+    )
+
+    annotated_frame = results[0].plot()
+
+    return av.VideoFrame.from_ndarray(
+        annotated_frame,
+        format="bgr24"
+    )
+
+
+webrtc_streamer(
+    key="av-detection",
+    video_frame_callback=video_frame_callback,
+    media_stream_constraints={
+        "video": True,
+        "audio": False
+    },
+)
+
+# -----------------------------------
+# SYSTEM INFO
+# -----------------------------------
+
+st.markdown("---")
+
+st.subheader("System Info")
+
+st.write("Model: YOLOv8 Nano")
+st.write("Detection Mode: AV Object Filtering")
+st.write("Framework: Ultralytics YOLO")
+st.write("Features: Image + Webcam Detection")
+st.write("Status: Active")

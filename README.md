@@ -34,6 +34,19 @@ Radar   ──► RadarNet  (MLP)       ──► Linear(64→256)  ──┘
 ```
 
 ---
+# Application Screenshots
+
+## Image Upload Detection
+
+![Upload Detection](assets/upload-demo.png)
+
+---
+
+## Real-Time Webcam Detection
+
+![Webcam Detection](assets/webcam-demo.png)
+
+---
 
 ## Project Structure
 
