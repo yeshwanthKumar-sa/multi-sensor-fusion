@@ -1,2 +1,28 @@
-*.exe 
-data/ 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+
+# Temporary files
+temp.txt
+fix.txt
+results.txt
+
+# Streamlit
+.streamlit/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model checkpoints
+*.pth
+
+# Logs
+*.log
+
+# Dataset
+data/
