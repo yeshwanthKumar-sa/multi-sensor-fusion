@@ -42,11 +42,7 @@ Radar   ──► RadarNet  (MLP)       ──► Linear(64→256)  ──┘
 
 ---
 
-## Real-Time Webcam Detection
 
-![Webcam Detection](assets/webcam-demo.png)
-
----
 
 ## Project Structure
 
